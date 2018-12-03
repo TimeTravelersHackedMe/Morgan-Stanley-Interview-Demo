@@ -1,0 +1,8 @@
+:host {
+    display: table;
+    height: 100%;
+    .middle {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}

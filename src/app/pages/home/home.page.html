@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Interview App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row class="table-header">
+      <ion-col (click)="changeFilter('ITEMUID')" [class.filtered]="sortType === 'ITEMUID'">
+        <app-center>
+          Token
+          <ion-icon name="arrow-dropup" *ngIf="sortAsc && sortType === 'ITEMUID'"></ion-icon>
+          <ion-icon name="arrow-dropdown" *ngIf="!sortAsc && sortType === 'ITEMUID'"></ion-icon>
+        </app-center>
+      </ion-col>
+      <ion-col class="float-right" text-right (click)="changeFilter('PRICE')" [class.filtered]="sortType === 'PRICE'">
+        <app-center>
+          <ion-icon class="align-top" name="arrow-dropup" *ngIf="sortAsc && sortType === 'PRICE'"></ion-icon>
+          <ion-icon class="align-top" name="arrow-dropdown" *ngIf="!sortAsc && sortType === 'PRICE'"></ion-icon>
+          <div class="todays-change-text">
+            Current Price<br /><small class="todays-change">Today's Change</small>
+          </div>
+        </app-center>
+      </ion-col>
+    </ion-row>
+    <ng-container *ngFor="let entry of priceData | sortBy: [sortAsc, sortType]; let i = index;">
+      <ion-row *ngIf="i < maxIndex">
+        <ion-col>
+          <app-center>
+            <strong class="ticker">{{ entry['FROMSYMBOL'] }} - {{ entry['ITEMUID'] }}</strong>
+          </app-center>
+        </ion-col>
+        <ion-col class="float-right" text-right>
+          <app-center>${{ entry['PRICE'] | number:'1.2-2' }}<br /><small class="change-stats" [class.positive]="entry['CHANGEPCTDAY'] > 0"
+              [class.negative]="entry['CHANGEPCTDAY'] < 0">{{ entry['CHANGEPCTDAY'] > 0 ? '+' : '' }}{{
+              entry['CHANGEPCTDAY'] | number:'1.2-4' }}% / ${{
+              entry['CHANGEDAY'] | removeMinusSign | number:'1.2-4' }}</small>
+          </app-center>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row *ngIf="!loadMoreHidden" class="load-more">
+      <ion-col class="load-more" *ngIf="!loadingMore" (click)="loadMore()">
+        <app-center>
+          Load more
+        </app-center>
+      </ion-col>
+      <ion-col class="load-more" *ngIf="loadingMore">
+        <app-center>
+          Loading data...
+        </app-center>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
